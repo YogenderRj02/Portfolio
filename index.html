@@ -2,332 +2,373 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yogender Choudhary — UAV Pilot &amp; LiDAR Operator</title>
-<meta name="description" content="UAV pilot and LiDAR operator: mining surveys, stockpile volumetrics, transmission-line and thermal inspections.">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#070b10; --bg2:#0b1219; --panel:#101921; --line:#1f2e38;
-  --ink:#eef4f5; --dim:#91a6ae; --faint:#5a6f79;
-  --teal:#3fe8c4; --teal-d:rgba(63,232,196,.12); --amber:#ffb35c;
-  --r:16px;
-  --display:'Space Grotesk',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
-}
+:root{--bg:#070b10;--bg2:#0b1219;--panel:#101921;--line:#1f2e38;--ink:#eef4f5;--dim:#9bb0b8;--teal:#3fe8c4;--tealt:#3fe8c4;--amber:#ffb35c;--btn:#04120e;color-scheme:dark;
+--d:'Space Grotesk',system-ui,sans-serif;--b:'Inter',system-ui,sans-serif;--m:'JetBrains Mono',ui-monospace,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f4f8f8;--bg2:#e8f0f1;--panel:#fff;--line:#d2dee1;--ink:#0b1a20;--dim:#4a6068;--tealt:#007a63;--amber:#b85f00;color-scheme:light}}
+:root[data-theme=light]{--bg:#f4f8f8;--bg2:#e8f0f1;--panel:#fff;--line:#d2dee1;--ink:#0b1a20;--dim:#4a6068;--tealt:#007a63;--amber:#b85f00;color-scheme:light}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;line-height:1.1}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--b);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--d);letter-spacing:-.02em;line-height:1.08}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-.wrap{width:min(1160px,92%);margin:auto}
-section{padding:110px 0}
-.eyebrow{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.eyebrow::before{content:"";width:24px;height:1px;background:var(--teal)}
+.w{width:min(1160px,92%);margin:auto}
+section{padding:104px 0}
+.ey{font:500 12px var(--m);letter-spacing:.16em;text-transform:uppercase;color:var(--tealt);display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.ey::before{content:"";width:24px;height:1px;background:var(--tealt)}
 h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:12px}
-.sub{color:var(--dim);max-width:560px;margin-bottom:48px}
-.btn{font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:14px 26px;border-radius:999px;border:1px solid var(--line);display:inline-flex;gap:8px;align-items:center;cursor:pointer;transition:.25s;background:none;color:var(--ink)}
-.btn.primary{background:var(--teal);color:#04120e;border-color:var(--teal);font-weight:600}
-.btn.primary:hover{box-shadow:0 10px 30px rgba(63,232,196,.3);transform:translateY(-2px)}
-.btn:not(.primary):hover{border-color:var(--teal);color:var(--teal)}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:14px 0;transition:.3s}
-nav.scrolled{background:rgba(7,11,16,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between}
-.brand{font:700 18px var(--display);display:flex;align-items:center;gap:10px}
-.brand i{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
-.links{display:flex;gap:6px;list-style:none}
-.links a{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:8px 14px;border-radius:999px;transition:.2s}
-.links a:hover,.links a.active{color:var(--teal);background:var(--teal-d)}
-.burger{display:none;background:none;border:1px solid var(--line);color:var(--ink);width:42px;height:42px;border-radius:10px;font-size:20px;cursor:pointer}
-
-/* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:120px 0 70px;overflow:hidden;
-  background:radial-gradient(ellipse 60% 50% at 80% 10%,rgba(63,232,196,.13),transparent 60%),radial-gradient(ellipse 50% 40% at 0% 100%,rgba(255,179,92,.07),transparent 60%)}
-.grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.28;mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 20%,transparent 75%)}
-.scan{position:absolute;left:0;right:0;height:140px;background:linear-gradient(transparent,rgba(63,232,196,.12),transparent);animation:scan 8s linear infinite;pointer-events:none}
-@keyframes scan{from{top:-140px}to{top:100%}}
-.hero .wrap{position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
-.badge{display:inline-flex;gap:10px;align-items:center;font:500 12px var(--mono);color:var(--teal);border:1px solid var(--teal-d);background:var(--teal-d);padding:8px 16px;border-radius:999px;margin-bottom:26px}
-.badge i{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 1.8s infinite}
-@keyframes pulse{50%{opacity:.25}}
-.hero h1{font-size:clamp(2.6rem,6.2vw,5rem);margin-bottom:22px}
-.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--teal),#8ff5de);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p.lead{color:var(--dim);font-size:18px;max-width:600px;margin-bottom:36px}
+.sub{color:var(--dim);max-width:580px;margin-bottom:46px}
+.btn{font:500 13px var(--m);letter-spacing:.06em;text-transform:uppercase;padding:14px 26px;border-radius:999px;border:1px solid var(--line);display:inline-flex;gap:8px;align-items:center;cursor:pointer;background:none;color:var(--ink);transition:.25s}
+.btn.p{background:var(--teal);border-color:var(--teal);color:var(--btn);font-weight:600}
+.btn.p:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(63,232,196,.3)}
+.btn:not(.p):hover{border-color:var(--tealt);color:var(--tealt)}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:calc(14px + env(safe-area-inset-top,0px)) 0 14px;transition:.3s}
+nav.s{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav .w{display:flex;justify-content:space-between;align-items:center}
+.br{font:700 18px var(--d);display:flex;gap:10px;align-items:center}
+.br i{width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.lk{display:flex;gap:4px;list-style:none}
+.lk a{font:500 12px var(--m);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:8px 14px;border-radius:999px;transition:.2s}
+.lk a:hover,.lk a.on{color:var(--tealt);background:color-mix(in srgb,var(--teal) 13%,transparent)}
+.bg{display:none;background:none;border:1px solid var(--line);color:var(--ink);width:42px;height:42px;border-radius:10px;font-size:20px;cursor:pointer}
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 70px;position:relative;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 85% 5%,rgba(63,232,196,.15),transparent 60%),radial-gradient(ellipse 45% 40% at 0 100%,rgba(255,179,92,.08),transparent 60%)}
+.hero .w{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
+.bd{display:inline-flex;gap:10px;align-items:center;font:500 12px var(--m);color:var(--tealt);border:1px solid color-mix(in srgb,var(--teal) 30%,transparent);background:color-mix(in srgb,var(--teal) 10%,transparent);padding:8px 16px;border-radius:999px;margin-bottom:26px}
+.bd i{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pl 1.8s infinite}
+@keyframes pl{50%{opacity:.2}}
+.hero h1{font-size:clamp(2.5rem,5.6vw,4.7rem);margin-bottom:22px}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--tealt),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--dim);font-size:18px;max-width:580px;margin-bottom:34px}
 .cta{display:flex;gap:14px;flex-wrap:wrap}
-.portrait{position:relative;aspect-ratio:4/5;border-radius:24px;border:1px solid var(--line);overflow:hidden;
-  background:linear-gradient(160deg,#12303a,#0b1219 60%),var(--panel)}
-.portrait::before{content:"YC";position:absolute;inset:0;display:grid;place-items:center;font:700 110px var(--display);color:rgba(63,232,196,.18)}
-.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.05) saturate(.9)}
-.portrait::after{content:"";position:absolute;inset:0;border-radius:24px;box-shadow:inset 0 0 0 1px var(--teal-d),inset 0 -90px 80px -40px rgba(7,11,16,.9)}
-.chip-float{position:absolute;z-index:2;font:500 11px var(--mono);letter-spacing:.06em;background:rgba(7,11,16,.8);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--ink)}
-.chip-float b{color:var(--teal);font-weight:500}
-.cf1{left:-26px;bottom:90px}.cf2{right:-18px;top:36px}
-.portrait-wrap{position:relative}
-
-/* TOOLS STRIP */
-.strip{border-block:1px solid var(--line);background:var(--bg2);padding:22px 0;overflow:hidden}
-.track{display:flex;gap:56px;width:max-content;animation:slide 32s linear infinite;font:500 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
-.track span::before{content:"◆";color:var(--teal);margin-right:14px;font-size:9px}
-@keyframes slide{to{transform:translateX(-50%)}}
-
-/* ABOUT */
-.about{background:var(--bg)}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
-.about p{color:var(--dim);font-size:16.5px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:26px;transition:.25s}
-.stat:hover{border-color:var(--teal);transform:translateY(-4px)}
-.stat b{display:block;font:700 40px var(--display);color:var(--teal)}
-.stat span{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
-.social{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
-.social a{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;color:var(--dim);transition:.2s}
-.social a:hover{color:var(--teal);border-color:var(--teal);background:var(--teal-d);transform:translateY(-3px)}
-
-/* SKILLS */
-.skills{background:var(--bg2);border-block:1px solid var(--line)}
-.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:32px;transition:.25s}
-.card:hover{border-color:rgba(63,232,196,.4);transform:translateY(-5px)}
-.card .ic{width:50px;height:50px;border-radius:14px;background:var(--teal-d);color:var(--teal);display:grid;place-items:center;font-size:22px;margin-bottom:20px}
-.card h3{font-size:19px;margin-bottom:18px}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
-.tags span{font-size:13px;color:var(--dim);border:1px solid var(--line);background:var(--bg2);padding:7px 13px;border-radius:999px}
-
-/* PROJECTS */
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
-.filters button{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;transition:.2s}
-.filters button:hover{color:var(--teal);border-color:var(--teal)}
-.filters button.on{background:var(--teal);color:#04120e;border-color:var(--teal);font-weight:600}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.proj{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:.3s}
-.proj:hover{transform:translateY(-6px);border-color:rgba(63,232,196,.45);box-shadow:0 20px 40px -20px rgba(0,0,0,.6)}
-.proj.hide{display:none}
-.pm{position:relative;height:200px;overflow:hidden;background:linear-gradient(135deg,#12303a,#0b1219);display:grid;place-items:center;font-size:54px;color:rgba(63,232,196,.3)}
-.pm img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.proj:hover .pm img{transform:scale(1.08)}
-.pm::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(16,25,33,.95))}
-.ptag{position:absolute;top:14px;left:14px;z-index:2;font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:rgba(7,11,16,.8);border:1px solid rgba(255,179,92,.28);padding:5px 10px;border-radius:6px}
+.hv{position:relative;aspect-ratio:1/.92;border-radius:26px;border:1px solid var(--line);overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#102a33,#070b10 75%)}
+.hv canvas{width:100%;height:100%;display:block}
+.drone{position:absolute;left:50%;top:7%;width:170px;margin-left:-85px;animation:fl 5s ease-in-out infinite}
+@keyframes fl{50%{transform:translate(18px,-10px)}}
+.hud{position:absolute;left:16px;bottom:14px;right:16px;display:flex;justify-content:space-between;font:500 10.5px var(--m);letter-spacing:.08em;color:#3fe8c4;text-transform:uppercase}
+.strip{border-block:1px solid var(--line);background:var(--bg2);padding:20px 0;overflow:hidden}
+.tr{display:flex;gap:54px;width:max-content;animation:sl 34s linear infinite;font:500 13px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.tr span::before{content:"◆";color:var(--teal);margin-right:14px;font-size:9px}
+@keyframes sl{to{transform:translateX(-50%)}}
+.ab{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+.mono{aspect-ratio:1;border-radius:26px;border:1px solid var(--line);background:linear-gradient(150deg,#12303a,#0b1219);display:grid;place-items:center;position:relative;overflow:hidden}
+.mono b{font:700 clamp(80px,13vw,150px) var(--d);background:linear-gradient(135deg,#3fe8c4,#ffb35c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mono span{position:absolute;bottom:16px;left:16px;font:500 11px var(--m);letter-spacing:.1em;color:#3fe8c4}
+.ab p{color:var(--dim);margin-bottom:14px}
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:28px 0}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;transition:.25s}
+.st:hover{border-color:var(--teal);transform:translateY(-4px)}
+.st b{display:block;font:700 32px var(--d);color:var(--tealt)}
+.st span{font:500 10.5px var(--m);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.so{display:flex;gap:10px;flex-wrap:wrap}
+.so a{font:500 12px var(--m);letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--line);padding:10px 16px;border-radius:999px;color:var(--dim);transition:.2s}
+.so a:hover{color:var(--tealt);border-color:var(--teal);transform:translateY(-2px)}
+.alt{background:var(--bg2);border-block:1px solid var(--line)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.cd{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:30px;transition:.3s}
+.cd:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--teal) 50%,transparent)}
+.cd .n{font:700 38px var(--d);color:var(--tealt);opacity:.55;margin-bottom:10px}
+.cd h3{font-size:19px;margin-bottom:10px}
+.cd p{color:var(--dim);font-size:14.5px;line-height:1.65}
+.tg{display:flex;flex-wrap:wrap;gap:8px}
+.tg span{font-size:13px;color:var(--dim);border:1px solid var(--line);background:var(--bg2);padding:6px 13px;border-radius:999px}
+.fl{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.fl button{font:500 12px var(--m);letter-spacing:.06em;text-transform:uppercase;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--dim);cursor:pointer;transition:.2s}
+.fl button:hover{color:var(--tealt);border-color:var(--teal)}
+.fl button.on{background:var(--teal);color:var(--btn);border-color:var(--teal);font-weight:600}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pj{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:.3s}
+.pj:hover{transform:translateY(-7px);border-color:color-mix(in srgb,var(--teal) 55%,transparent);box-shadow:0 24px 44px -24px rgba(0,0,0,.55)}
+.pj.h{display:none}
+.art{position:relative;height:210px;overflow:hidden;background-color:#0b1219;background-image:linear-gradient(135deg,#12303a,#0b1219 70%),linear-gradient(rgba(63,232,196,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(63,232,196,.06) 1px,transparent 1px);background-size:100% 100%,28px 28px,28px 28px;background-blend-mode:normal}
+.art svg{width:100%;height:100%;transition:transform .6s}
+.pj:hover .art svg{transform:scale(1.07)}
+.pt{position:absolute;top:14px;left:14px;font:500 10.5px var(--m);letter-spacing:.08em;text-transform:uppercase;color:#ffb35c;background:rgba(7,11,16,.82);border:1px solid rgba(255,179,92,.3);padding:5px 10px;border-radius:6px}
 .pb{padding:22px;display:flex;flex-direction:column;flex:1}
-.pb h3{font-size:19px;margin-bottom:10px}
+.pb h3{font-size:19px;margin-bottom:8px}
 .pb p{color:var(--dim);font-size:14.5px;flex:1}
-.more{margin-top:18px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);display:flex;gap:8px;align-items:center}
-.proj:hover .more i{transform:translateX(5px)}
-.more i{transition:.2s}
-
-/* DIALOG */
-dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:20px;width:min(640px,92vw);max-height:90vh;padding:0;margin:auto;overflow:auto}
+.mr{margin-top:16px;font:500 12px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--tealt)}
+dialog{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:22px;width:min(660px,92vw);max-height:90vh;padding:0;margin:auto;overflow:auto}
 dialog::backdrop{background:rgba(3,6,9,.78);backdrop-filter:blur(6px)}
-dialog[open]{animation:pop .3s ease}
-@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.97)}}
-.dm{height:250px;position:relative;background:linear-gradient(135deg,#12303a,#0b1219);display:grid;place-items:center;font-size:64px;color:rgba(63,232,196,.3)}
-.dm img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.dbody{padding:30px}
-.dbody h3{font-size:26px;margin:12px 0}
-.dbody p{color:var(--dim)}
-.x{position:absolute;top:14px;right:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(7,11,16,.8);color:var(--ink);cursor:pointer;font-size:18px}
-.x:hover{border-color:var(--teal);color:var(--teal)}
-
-/* CONTACT */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:38px}
-.info{display:flex;gap:14px;align-items:center;margin-bottom:26px;color:var(--dim);word-break:break-all}
-.info i{width:44px;height:44px;border-radius:12px;background:var(--teal-d);color:var(--teal);display:grid;place-items:center;flex-shrink:0}
-label{display:block;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
-input,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink);font:400 15px var(--body);margin-bottom:20px;outline:none;transition:.2s}
-input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-d)}
-textarea{min-height:130px;resize:vertical}
-.map{border-radius:20px;overflow:hidden;border:1px solid var(--line);min-height:420px;height:100%;filter:grayscale(40%) contrast(1.1) brightness(.8)}
-.map iframe{width:100%;height:100%;min-height:420px;border:0;display:block}
-footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;font:400 12px var(--mono);color:var(--faint);letter-spacing:.04em}
-
-.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
-.rv.in{opacity:1;transform:none}
-
-@media(max-width:900px){
-  section{padding:76px 0}
-  .hero .wrap,.about-grid,.contact-grid{grid-template-columns:1fr}
-  .cards3,.pgrid{grid-template-columns:1fr 1fr}
-  .portrait-wrap{max-width:340px}.cf1{left:-8px}.cf2{right:-8px}
-  .burger{display:block}
-  .links{position:absolute;top:100%;left:0;right:0;flex-direction:column;background:rgba(7,11,16,.97);border-bottom:1px solid var(--line);padding:12px 4%;display:none}
-  .links.open{display:flex}
-}
-@media(max-width:600px){.cards3,.pgrid{grid-template-columns:1fr}.panel{padding:26px}}
+dialog[open]{animation:po .3s}
+@keyframes po{from{opacity:0;transform:translateY(16px) scale(.97)}}
+.db{padding:30px}.db h3{font-size:26px;margin:12px 0}.db p{color:var(--dim)}
+.db .art{height:260px}
+.db h4{font:500 12px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--tealt);margin:30px 0 12px}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.mg div{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.45}.mg span{display:block;font:500 10px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+.stp{list-style:none;counter-reset:s}.stp li{counter-increment:s;position:relative;padding:0 0 20px 48px;color:var(--dim);font-size:14.5px;line-height:1.6}.stp li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:color-mix(in srgb,var(--teal) 14%,transparent);border:1px solid color-mix(in srgb,var(--teal) 40%,transparent);color:var(--tealt);font:600 13px var(--m);display:grid;place-items:center}.stp li::after{content:"";position:absolute;left:15px;top:36px;bottom:4px;width:1px;background:var(--line)}.stp li:last-child::after{display:none}.stp li b{color:var(--ink);font-weight:600}
+.ot{list-style:none}.ot li{color:var(--dim);font-size:14.5px;padding:9px 0 9px 28px;position:relative;border-top:1px solid var(--line)}.ot li:first-child{border-top:0}.ot li::before{content:"✓";position:absolute;left:0;color:var(--tealt);font-weight:700}
+.rs{margin-top:26px;border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);background:color-mix(in srgb,var(--amber) 8%,transparent);border-radius:14px;padding:16px 18px;color:var(--ink);font-size:14.5px}.rs b{display:block;font:500 11px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+@media(max-width:600px){.mg{grid-template-columns:1fr}}
+.rp{margin-top:30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg2)}
+.rh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--panel);font:600 14px var(--d)}
+.rh span{font:500 10px var(--m);letter-spacing:.12em;color:var(--amber);border:1px solid color-mix(in srgb,var(--amber) 45%,transparent);padding:4px 8px;border-radius:6px;white-space:nowrap}
+.db .rp .art{height:150px;border-bottom:1px solid var(--line)}
+.rt{width:100%;border-collapse:collapse;font-size:13.5px}.rt th{font:500 10px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}.rt td{padding:10px 14px;border-bottom:1px solid var(--line);color:var(--ink)}.rt tr:last-child td{border-bottom:0}
+.bx{display:inline-block;font:600 11px var(--m);padding:3px 9px;border-radius:999px}.bh{background:rgba(255,90,60,.16);color:#ff6a4d}.bm{background:rgba(255,179,92,.16);color:var(--amber)}.bl{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--tealt)}
+.bars{padding:16px 18px 6px}.b2{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12.5px;color:var(--dim)}.b2 i{display:block;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--teal),var(--amber))}.b2 em{font-style:normal;min-width:62px;color:var(--ink)}
+.rf{padding:12px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font:500 11px var(--m);color:var(--dim);border-top:1px solid var(--line)}
+.rn{padding:0 18px 14px;font-size:12px;color:var(--dim);font-style:italic}
+.pp{margin-top:30px;background:#fff;color:#14222b;border-radius:10px;padding:24px;font-size:13px;line-height:1.55;box-shadow:0 24px 44px -24px rgba(0,0,0,.7)}
+.pp .lh{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;border-bottom:2px solid #0a8f77;padding-bottom:12px}.pp .lh b{display:block;font:700 15px var(--d);letter-spacing:.04em}.pp .lh span{font-size:11px;color:#5b707a}.pp .rno{font:500 10.5px var(--m);color:#5b707a;text-align:right}
+.pp h5{font:700 20px/1.2 var(--d);margin:18px 0 12px;color:#0b1a20}
+.pp .mt{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#d5e0e3;border:1px solid #d5e0e3;border-radius:6px;overflow:hidden}.pp .mt div{background:#f6fafa;padding:8px 12px;font-size:12px}.pp .mt span{display:block;font:500 9.5px var(--m);letter-spacing:.1em;text-transform:uppercase;color:#6b8089}
+.pp .sh{font:700 11.5px var(--m);letter-spacing:.08em;text-transform:uppercase;color:#0a7d69;margin:18px 0 6px}
+.pp p{color:#33474f;margin:0}.pp ul{margin:0;padding-left:18px;color:#33474f}
+.pp .pf{border:1px solid #cdd9dc;border-radius:6px;overflow:hidden;margin-top:8px}.pp .pf svg{display:block;width:100%;height:auto;background:#0b1219}
+.pp .pc{font-size:11px;color:#6b8089;margin:6px 0 0}
+.pp .rt th{background:#eef4f5;color:#3b4f58;border-bottom:1px solid #d5e0e3}.pp .rt td{color:#14222b;border-bottom:1px solid #e3ecee}
+.pp .b2{color:#4a5e67}.pp .b2 em{color:#14222b}
+.pp .bl{background:#d9f6ee;color:#087a65}.pp .bm{background:#fff0dc;color:#a85a00}.pp .bh{background:#ffe1dc;color:#c0321c}
+.pp .sg{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:20px;padding-top:12px;border-top:1px solid #d5e0e3;font-size:11.5px;color:#5b707a}.pp .sg i{display:block;font:italic 24px 'Brush Script MT','Segoe Script',cursive;color:#14222b}
+.pp .ft{margin-top:12px;font:500 11px var(--m);color:#5b707a}.pp .ft span{display:inline-block;background:#eef4f5;color:#3b4f58;border-radius:999px;padding:3px 10px;margin:3px 4px 0 0;font-size:11px}
+.pp .fn{margin-top:10px;font-size:10.5px;color:#8a9ca3;font-style:italic}
+.art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s}.pj:hover .art img{transform:scale(1.07)}.pp .pf img{display:block;width:100%;height:auto}
+.x{position:absolute;top:14px;right:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(7,11,16,.85);color:#fff;cursor:pointer;font-size:18px}
+.ct{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pn{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:36px}
+.row{display:flex;gap:14px;align-items:center;margin-bottom:22px;color:var(--dim);word-break:break-word}
+.row b{width:44px;height:44px;border-radius:12px;background:color-mix(in srgb,var(--teal) 13%,transparent);display:grid;place-items:center;flex-shrink:0;font-size:18px}
+label{display:block;font:500 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+input,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink);font:400 15px var(--b);margin-bottom:18px;outline:none;transition:.2s}
+input:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 15%,transparent)}
+textarea{min-height:120px;resize:vertical}
+footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;font:400 12px var(--m);color:var(--dim);letter-spacing:.04em}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
+#pr{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));z-index:60}
+.cd,.pj,.st{position:relative}.cd::before,.pj::before,.st::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--teal) 15%,transparent),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;z-index:1}.cd:hover::before,.pj:hover::before,.st:hover::before{opacity:1}
+.tp{color:var(--tealt)}.tp::after{content:"|";margin-left:2px;animation:bk 1s steps(1) infinite}@keyframes bk{50%{opacity:0}}
+.tl{font:500 15px var(--m);color:var(--dim);margin-bottom:18px}
+.tb{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:36px;font:500 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);width:100%}
+.wa{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;background:#25d366;color:#04120e;font:600 13px var(--m);padding:13px 20px;border-radius:999px;box-shadow:0 10px 30px rgba(37,211,102,.35);transition:.2s}.wa:hover{transform:translateY(-3px)}
+.th{background:none;border:1px solid var(--line);color:var(--ink);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:16px;margin-left:8px}.th:hover{border-color:var(--teal)}
+.hv{transition:transform .25s}
+@media(max-width:900px){section{padding:72px 0}.hero .w,.ab,.ct{grid-template-columns:1fr}.g3,.pg{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}.sr{grid-template-columns:1fr 1fr}.mono{max-width:300px}
+.bg{display:block}.lk{position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 4%;display:none}.lk.o{display:flex}}
+@media(max-width:600px){.g3,.pg,.g4{grid-template-columns:1fr}.pn{padding:24px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+<div id="pr"></div>
+<nav id="nav"><div class="w"><a class="br" href="#home"><i></i>YOGENDER · UAV/LIDAR</a>
+<button class="bg" id="bg" aria-label="Menu">☰</button>
+<ul class="lk" id="lk"><li><a href="#home" class="on">Home</a></li><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#projects">Projects</a></li><li><a href="#contact">Contact</a></li></ul><button class="th" id="th" aria-label="Toggle theme">◐</button></div></nav>
 
-<nav id="nav">
-  <div class="wrap">
-    <a class="brand" href="#home"><i></i>YOGENDER · UAV/LIDAR</a>
-    <button class="burger" id="burger" aria-label="Menu"><i class="bi bi-list"></i></button>
-    <ul class="links" id="links">
-      <li><a href="#home" class="active">Home</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </div>
-</nav>
+<header class="hero" id="home"><div class="w">
+<div>
+<div class="bd"><i></i>Booking survey projects across India</div>
+<h1>I turn airspace into <em>survey-grade data.</em></h1>
+<div class="tl">I’m a <span class="tp" id="tp"></span></div><p class="lead">From Asia’s second-largest open-pit mine to 10 km power corridors and steel-plant furnaces — I fly DJI M300 missions with LiDAR, RGB and thermal payloads, then turn the raw scans into terrain models, stockpile volumes and inspection reports you can act on.</p>
+<div class="cta"><a href="#projects" class="btn p">See my missions →</a><a href="#contact" class="btn">Hire me for a survey</a></div>
+<div class="tb"><span>Worked with</span><span class="tg"><span>Hindustan Zinc</span><span>Jindal Steel (JSPL)</span><span>Excise Dept., Bihar</span></span></div>
+</div>
+<div class="hv"><canvas id="cv"></canvas>
+<svg class="drone" viewBox="0 0 170 90" fill="none"><defs><linearGradient id="bm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fe8c4" stop-opacity=".5"/><stop offset="1" stop-color="#3fe8c4" stop-opacity="0"/></linearGradient></defs>
+<path d="M85 34 L45 150 H125Z" fill="url(#bm)" transform="translate(0 -4) scale(1 .6)"/>
+<rect x="68" y="18" width="34" height="16" rx="7" fill="#12303a" stroke="#3fe8c4"/><rect x="78" y="34" width="14" height="8" rx="3" fill="#3fe8c4"/>
+<path d="M68 22L26 12M102 22L144 12" stroke="#3fe8c4" stroke-width="2"/>
+<ellipse cx="22" cy="10" rx="20" ry="3" fill="#3fe8c4" opacity=".7"/><ellipse cx="148" cy="10" rx="20" ry="3" fill="#3fe8c4" opacity=".7"/></svg>
+<div class="hud"><span>LiDAR scan · live</span><span>Pts 2.1M / sec</span></div></div>
+</div></header>
 
-<header class="hero" id="home">
-  <div class="grid-bg"></div><div class="scan"></div>
-  <div class="wrap">
-    <div>
-      <div class="badge"><i></i>Available for survey projects</div>
-      <h1>Yogender Choudhary<br><em>flies drones. maps ground truth.</em></h1>
-      <p class="lead">UAV Pilot &amp; LiDAR Operator with hands-on experience running the Metron X 3D LiDAR system for mining and geospatial mapping — from open-pit surveys to thermal transmission-line inspections.</p>
-      <div class="cta">
-        <a href="#projects" class="btn primary">View Projects <i class="bi bi-arrow-right"></i></a>
-        <a href="#contact" class="btn">Get in touch</a>
-      </div>
-    </div>
-    <div class="portrait-wrap">
-      <div class="portrait"><img src="pro.png" alt="Yogender Choudhary" onerror="this.remove()"></div>
-      <div class="chip-float cf1"><b>PAYLOAD</b> LiDAR · RGB · Thermal</div>
-      <div class="chip-float cf2"><b>PLATFORM</b> DJI M300</div>
-    </div>
-  </div>
-</header>
+<div class="strip"><div class="tr" aria-hidden="true"><span>DJI Terra</span><span>CloudCompare</span><span>Agisoft Metashape</span><span>Global Mapper</span><span>DJI Thermal Analysis</span><span>Metron X LiDAR</span><span>DJI Terra</span><span>CloudCompare</span><span>Agisoft Metashape</span><span>Global Mapper</span><span>DJI Thermal Analysis</span><span>Metron X LiDAR</span></div></div>
 
-<div class="strip"><div class="track" aria-hidden="true">
-  <span>DJI Terra</span><span>CloudCompare</span><span>Agisoft Metashape</span><span>Global Mapper</span><span>DJI Thermal Analysis</span><span>Metron X LiDAR</span><span>DJI Terra</span><span>CloudCompare</span><span>Agisoft Metashape</span><span>Global Mapper</span><span>DJI Thermal Analysis</span><span>Metron X LiDAR</span>
-</div></div>
+<section id="about"><div class="w ab">
+<div class="mono rv"><b>YC</b><span>CALLSIGN · YC-01</span></div>
+<div class="rv"><div class="ey">Pilot profile</div><h2>Precision in the air. Clarity on the ground.</h2>
+<p>I’m a UAV pilot and LiDAR operator who has run the Metron X 3D LiDAR system on mining and geospatial projects for some of India’s biggest industrial sites. I plan the mission, fly it safely with strict pre- and post-flight checks, and process the data myself in CloudCompare, DJI Terra, Metashape and Global Mapper.</p>
+<p>I also build my own tools — custom LiDAR rigs, SLAM pipelines and web dashboards — so when a project needs something off the shelf can’t do, I can make it. My goal: push UAV technology further into innovative geospatial solutions.</p>
+<div class="sr"><div class="st"><b data-n="6" data-s="+">6+</b><span>Field missions</span></div><div class="st"><b data-n="10" data-s=" km">10 km</b><span>Corridor surveyed</span></div><div class="st"><b data-n="3" data-s="">3</b><span>Sensor payloads</span></div><div class="st"><b>M300</b><span>Primary platform</span></div></div>
+<div class="so"><a href="https://wa.me/919116882733" target="_blank" rel="noopener">WhatsApp</a><a href="https://bit.ly/yogender" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/YogenderRj02" target="_blank" rel="noopener">GitHub</a><a href="https://www.instagram.com/choudhary_yogender_1/" target="_blank" rel="noopener">Instagram</a><a href="https://www.youtube.com/@memeszone7122" target="_blank" rel="noopener">YouTube</a><a href="https://www.facebook.com/choudhary.yogander" target="_blank" rel="noopener">Facebook</a></div>
+</div></div></section>
 
-<section class="about" id="about">
-  <div class="wrap about-grid">
-    <div class="rv">
-      <div class="eyebrow">Pilot Profile</div>
-      <h2>About Me</h2>
-      <p>I'm a UAV Pilot and LiDAR Operator with extensive experience in operating the Metron X 3D LiDAR system for mining and geospatial mapping projects. I'm proficient in UAV operations, high-resolution aerial surveys, and LiDAR data processing using CloudCompare.</p>
-      <p style="margin-top:14px">Skilled in drone-based inspections, I ensure safety and compliance through meticulous pre-flight and post-flight checks. I coordinate well with teams and have a strong foundation in DJI/custom drone mission planning, data processing and repair. My goal is to advance UAV technology integration for innovative geospatial solutions.</p>
-      <div class="social">
-        <a href="https://wa.me/919116882733" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-        <a href="https://www.facebook.com/choudhary.yogander" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        <a href="https://www.instagram.com/choudhary_yogender_1/" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-        <a href="https://www.youtube.com/@memeszone7122" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-        <a href="https://bit.ly/yogender" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-        <a href="https://github.com/YogenderRj02" target="_blank" rel="noopener" aria-label="GitHub"><i class="bi bi-github"></i></a>
-      </div>
-    </div>
-    <div class="stats rv">
-      <div class="stat"><b>6+</b><span>Field Missions</span></div>
-      <div class="stat"><b>10 km</b><span>Corridor Surveyed</span></div>
-      <div class="stat"><b>3</b><span>Sensor Payloads</span></div>
-      <div class="stat"><b>M300</b><span>Primary Platform</span></div>
-    </div>
-  </div>
-</section>
+<section class="alt" id="services"><div class="w">
+<div class="ey">What I deliver</div><h2>Five services. One reliable pilot.</h2><p class="sub">Every job ends with data you can use, not just files you have to decode.</p>
+<div class="g3">
+<div class="cd rv"><div class="n">01</div><h3>LiDAR terrain &amp; mine mapping</h3><p>High-density point clouds for open-pit mines — terrain models, benches and planning-ready outputs.</p></div>
+<div class="cd rv"><div class="n">02</div><h3>Stockpile volumetrics</h3><p>Monthly UAV LiDAR and photogrammetry volume reports for inventory control and operational planning.</p></div>
+<div class="cd rv"><div class="n">03</div><h3>Power-line corridor survey</h3><p>Corridor mapping and obstacle analysis along transmission lines, from LiDAR and RGB capture.</p></div>
+<div class="cd rv"><div class="n">04</div><h3>Thermal inspection</h3><p>Hotspot detection on lines, kilns, boilers and chimneys, with reports built for predictive maintenance.</p></div>
+<div class="cd rv"><div class="n">05</div><h3>Aerial surveillance</h3><p>Real-time monitoring and reconnaissance for public-sector teams that need situational awareness.</p></div>
+<div class="cd rv"><div class="n">06</div><h3>Custom tools &amp; processing</h3><p>Drone-data repair, calibration tools, SLAM pipelines and dashboards when the project needs more.</p></div>
+</div></div></section>
 
-<section class="skills" id="skills">
-  <div class="wrap">
-    <div class="eyebrow">Capabilities</div>
-    <h2>My Skills</h2>
-    <p class="sub">The tools and disciplines behind every mission — from flight planning to point-cloud processing.</p>
-    <div class="cards3">
-      <div class="card rv"><div class="ic"><i class="bi bi-cpu"></i></div><h3>LiDAR &amp; Drone Ops</h3>
-        <div class="tags"><span>LiDAR system operation</span><span>LiDAR data processing</span><span>DJI / custom mission planning</span><span>Data repairing</span><span>Flight-planning software</span></div></div>
-      <div class="card rv"><div class="ic"><i class="bi bi-code-slash"></i></div><h3>Technical Skills</h3>
-        <div class="tags"><span>HTML / CSS</span><span>JavaScript</span><span>React</span><span>Node.js</span></div></div>
-      <div class="card rv"><div class="ic"><i class="bi bi-people"></i></div><h3>Soft Skills</h3>
-        <div class="tags"><span>Communication</span><span>Teamwork</span><span>Problem-solving</span><span>Time management</span></div></div>
-    </div>
-  </div>
-</section>
+<section id="process"><div class="w">
+<div class="ey">How I work</div><h2>From mission plan to final report.</h2><p class="sub">A repeatable workflow that keeps flights safe and results consistent.</p>
+<div class="g4">
+<div class="cd rv"><div class="n">01</div><h3>Plan</h3><p>Site study, DJI or custom mission planning, and safety and compliance checks.</p></div>
+<div class="cd rv"><div class="n">02</div><h3>Fly</h3><p>Pre-flight and post-flight checks, then clean LiDAR, RGB or thermal capture.</p></div>
+<div class="cd rv"><div class="n">03</div><h3>Process</h3><p>DJI Terra, CloudCompare, Metashape and Global Mapper for accurate outputs.</p></div>
+<div class="cd rv"><div class="n">04</div><h3>Deliver</h3><p>Point clouds, models, volume and thermal reports ready for your team.</p></div>
+</div>
+<div style="margin-top:44px" class="tg rv"><span>DJI / custom drone planning</span><span>LiDAR processing</span><span>Data repair</span><span>HTML · JavaScript · React · Node.js</span><span>Teamwork</span><span>Problem-solving</span><span>Time management</span></div>
+</div></section>
 
-<section id="projects" style="background:var(--bg)">
-  <div class="wrap">
-    <div class="eyebrow">Mission Log</div>
-    <h2>My Projects</h2>
-    <p class="sub">Selected surveys and inspections flown across mining, energy and public-sector sites.</p>
-    <div class="filters" id="filters">
-      <button class="on" data-f="all">All</button><button data-f="lidar">LiDAR</button><button data-f="photo">Photogrammetry</button><button data-f="thermal">Thermal</button><button data-f="surv">Surveillance</button>
-    </div>
-    <div class="pgrid" id="pgrid"></div>
-  </div>
-</section>
+<section class="alt" id="projects"><div class="w">
+<div class="ey">Mission log</div><h2>Selected missions</h2><p class="sub">Surveys and inspections flown across mining, steel, power and public-sector sites.</p>
+<div class="fl" id="fl"><button class="on" data-f="all">All</button><button data-f="lidar">LiDAR</button><button data-f="photo">Photogrammetry</button><button data-f="thermal">Thermal</button><button data-f="surv">Surveillance</button></div>
+<div class="pg" id="pg"></div></div></section>
+<dialog id="dg"><button class="x" id="dx" aria-label="Close">✕</button><div id="dc"></div></dialog>
 
-<dialog id="dlg"><button class="x" id="dx" aria-label="Close"><i class="bi bi-x-lg"></i></button><div id="dcontent"></div></dialog>
-
-<section id="contact" style="background:var(--bg2);border-top:1px solid var(--line)">
-  <div class="wrap">
-    <div class="eyebrow">Establish Contact</div>
-    <h2>Get in Touch</h2>
-    <p class="sub">Have a survey or inspection project? Send a message and I'll get back to you.</p>
-    <div class="contact-grid">
-      <div class="panel rv">
-        <div class="info"><i class="bi bi-envelope"></i><span>ykchoudhary911733@gmail.com</span></div>
-        <div class="info"><i class="bi bi-whatsapp"></i><a href="https://wa.me/919116882733" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
-        <form id="form">
-          <label for="msg">Message</label>
-          <textarea id="msg" placeholder="Tell me about your project..." required></textarea>
-          <button class="btn primary" type="submit"><i class="bi bi-send"></i> Send Email</button>
-        </form>
-      </div>
-      <div class="map rv"><iframe title="Location map" loading="lazy" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d585.3342988805725!2d76.71588197732939!3d27.998524781772506!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1739705856495!5m2!1sen!2sin" allowfullscreen></iframe></div>
-    </div>
-  </div>
-</section>
-
-<footer>&copy; <span id="yr"></span> Yogender Choudhary — UAV Pilot &amp; LiDAR Operator</footer>
+<section id="contact"><div class="w">
+<div class="ey">Let’s fly</div><h2>Have a site to survey?</h2><p class="sub">Tell me about your project — location, area and what you need out of it — and I’ll reply with a plan.</p>
+<div class="ct"><div class="pn rv">
+<div class="row"><b>✉</b><a href="mailto:ykchoudhary911733@gmail.com">ykchoudhary911733@gmail.com</a></div>
+<div class="row"><b>☏</b><a href="https://wa.me/919116882733" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
+<div class="row"><b>⌖</b><span>Rajasthan, India · available across India</span></div></div>
+<div class="pn rv"><form id="fm"><label for="nm">Your name</label><input id="nm" placeholder="Name" required>
+<label for="ms">Project details</label><textarea id="ms" placeholder="Site, area, type of survey..." required></textarea>
+<button class="btn p" type="submit">Send email →</button></form></div></div>
+</div></section>
+<footer>© <span id="yr"></span> Yogender Choudhary — UAV Pilot &amp; LiDAR Operator</footer>
+<a class="wa" href="https://wa.me/919116882733" target="_blank" rel="noopener">WhatsApp me</a>
 
 <script>
+var A={
+mine:function(){var s='';for(var i=0;i<8;i++)s+='<ellipse cx="200" cy="'+(92+i*7)+'" rx="'+(178-i*21)+'" ry="'+(74-i*8)+'" fill="none" stroke="#3fe8c4" stroke-opacity="'+(.2+i*.08)+'"/>';return s+'<circle cx="200" cy="146" r="5" fill="#ffb35c"/>'},
+stock:function(){return[[100,150,70],[225,160,92],[320,142,56]].map(function(c){var x=c[0],y=c[1],r=c[2];return'<path d="M'+(x-r)+' '+(y+30)+'L'+x+' '+(y-r*.85)+'L'+(x+r)+' '+(y+30)+'Z" fill="#3fe8c4" fill-opacity=".1" stroke="#3fe8c4"/><ellipse cx="'+x+'" cy="'+(y+30)+'" rx="'+r+'" ry="'+r*.22+'" fill="none" stroke="#ffb35c" stroke-opacity=".7"/><ellipse cx="'+x+'" cy="'+(y+8)+'" rx="'+r*.55+'" ry="'+r*.12+'" fill="none" stroke="#ffb35c" stroke-opacity=".4"/>'}).join('')},
+tower:function(hot){var s='<g stroke="#3fe8c4" stroke-width="1.5" fill="none">';[90,310].forEach(function(x){s+='<path d="M'+x+' 36L'+(x-24)+' 205M'+x+' 36L'+(x+24)+' 205M'+(x-17)+' 125H'+(x+17)+'M'+(x-9)+' 82H'+(x+9)+'M'+(x-32)+' 62H'+(x+32)+'"/>'});[-32,0,32].forEach(function(d){s+='<path d="M'+(90+d)+' 62Q200 '+(118+d/3)+' '+(310+d)+' 62" stroke="'+(hot&&d==0?'#ffb35c':'#3fe8c4')+'" stroke-opacity=".8"/>'});s+='</g>';if(hot)s+='<circle cx="200" cy="90" r="34" fill="#ff5a3c" fill-opacity=".25"/><circle cx="200" cy="90" r="16" fill="#ffb35c" fill-opacity=".55"/>';return s},
+plant:function(){return'<g fill="#12303a" stroke="#3fe8c4"><rect x="70" y="60" width="26" height="140"/><rect x="170" y="100" width="90" height="100"/><rect x="290" y="130" width="60" height="70"/></g><circle cx="83" cy="52" r="26" fill="#ff5a3c" fill-opacity=".3"/><circle cx="83" cy="52" r="12" fill="#ffb35c" fill-opacity=".7"/><circle cx="215" cy="120" r="22" fill="#ffb35c" fill-opacity=".4"/><circle cx="320" cy="150" r="14" fill="#ff5a3c" fill-opacity=".45"/>'},
+surv:function(){var s='';[30,65,100].forEach(function(r){s+='<circle cx="200" cy="110" r="'+r+'" fill="none" stroke="#3fe8c4" stroke-opacity=".4"/>'});return s+'<path d="M200 110L300 70A108 108 0 0 1 306 128Z" fill="#3fe8c4" fill-opacity=".18"/><path d="M200 8V212M92 110H308" stroke="#3fe8c4" stroke-opacity=".25"/><circle cx="262" cy="82" r="5" fill="#ffb35c"/><circle cx="150" cy="140" r="4" fill="#ffb35c" fill-opacity=".7"/>'}
+};
 var P=[
- {t:"Mine Survey",tag:"M300 · L1 LiDAR",c:"lidar",i:"m300minesurvey.png",ic:"bi-layers",s:"Aerial LiDAR survey for Asia's second-largest open-pit mine using the M300 drone and L1 LiDAR sensor.",d:"Conducted aerial LiDAR survey for Asia's second-largest open-pit mine using the M300 drone and L1 LiDAR sensor. Acquired high-resolution point cloud data to generate accurate terrain models and mine planning insights. Processed and analyzed data using DJI Terra and CloudCompare to ensure high-quality outputs for efficient mining operations."},
- {t:"Stockpile Volume",tag:"Photogrammetry",c:"photo lidar",i:"stockpile.png",ic:"bi-bar-chart",s:"Monthly volumetric surveys for Hindustan Zinc Limited (Udaipur) and other sites for inventory control.",d:"Conduct monthly volumetric surveys for Hindustan Zinc Limited (Udaipur), Jindal Steel Plant (Raigarh), and Jindal Steel Plant (Angul) to assist in stockpile management. Utilize UAV-based LiDAR and photogrammetry techniques to accurately measure material volumes. Process data using CloudCompare, Agisoft Metashape and Global Mapper to generate precise reports, aiding in inventory control and operational planning."},
- {t:"Transmission Line Survey",tag:"10 KM Corridor",c:"lidar",i:"M300drone.png",ic:"bi-lightning-charge",s:"A 10 km transmission line survey in Rishikesh using the M300 drone with L1 LiDAR payload.",d:"Conducted a 10 km transmission line survey in Rishikesh using the M300 drone with L1 LiDAR payload in October 2022. Captured high-precision LiDAR and RGB data for corridor mapping and obstacle analysis. Processed data using DJI Terra and CloudCompare to generate accurate 3D models and assist in infrastructure assessment and maintenance planning."},
- {t:"Transmission Line Survey",tag:"Thermal + RGB",c:"thermal",i:"m3t.png",ic:"bi-thermometer-half",s:"Transmission line survey for JSPL Raigarh using thermal and RGB imaging.",d:"Conducted transmission line survey for JSPL Raigarh using thermal and RGB imaging. Captured and analyzed thermal data to detect hotspot anomalies and assess line conditions. Processed RGB and thermal images using DJI Thermal Analysis Tool and other software to generate detailed inspection reports, ensuring efficient fault detection and maintenance planning."},
- {t:"Thermal Project",tag:"Thermal Inspection",c:"thermal",i:"tharmal.png",ic:"bi-fire",s:"Thermal inspection at JSPL Raigarh's steel plant: rotary kilns, coke ovens, boilers and boiler pipes.",d:"Executed a thermal inspection project at JSPL Raigarh's steel plant, surveying rotary kilns, coke ovens, boilers, boiler pipes, and chimneys using thermal and RGB imaging. Captured and analyzed thermal data to identify heat anomalies, structural issues, and operational inefficiencies. Processed images using DJI Thermal Analysis Tool to generate actionable reports for predictive maintenance and performance optimization."},
- {t:"Surveillance",tag:"Aerial Surveillance",c:"surv",i:"drone.png",ic:"bi-eye",s:"One month with the Excise Department in Patna, Bihar, conducting aerial surveillance operations.",d:"Worked with the Excise Department in Patna, Bihar, for one month, conducting aerial surveillance operations. Utilized drone technology for monitoring and reconnaissance to support law enforcement activities. Assisted in capturing and analyzing real-time data for improved situational awareness and operational planning."}
-];
-var grid=document.getElementById("pgrid"),dlg=document.getElementById("dlg"),dc=document.getElementById("dcontent");
-P.forEach(function(p,n){
-  var el=document.createElement("article");
-  el.className="proj rv";el.dataset.c=p.c;el.tabIndex=0;
-  el.innerHTML='<div class="pm"><i class="bi '+p.ic+'"></i><img src="'+p.i+'" alt="'+p.t+'" loading="lazy" onerror="this.remove()"><span class="ptag">'+p.tag+'</span></div><div class="pb"><h3>'+p.t+'</h3><p>'+p.s+'</p><div class="more">View details <i class="bi bi-arrow-right"></i></div></div>';
-  function open(){
-    dc.innerHTML='<div class="dm"><i class="bi '+p.ic+'"></i><img src="'+p.i+'" alt="'+p.t+'" onerror="this.remove()"></div><div class="dbody"><span class="ptag" style="position:static;display:inline-block">'+p.tag+'</span><h3>'+p.t+'</h3><p>'+p.d+'</p></div>';
-    dlg.showModal();
-  }
-  el.addEventListener("click",open);
-  el.addEventListener("keydown",function(e){if(e.key==="Enter")open()});
-  grid.appendChild(el);
-});
-document.getElementById("dx").onclick=function(){dlg.close()};
-dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
-
-document.getElementById("filters").addEventListener("click",function(e){
-  var b=e.target.closest("button");if(!b)return;
-  this.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");
-  var f=b.dataset.f;
-  grid.querySelectorAll(".proj").forEach(function(c){c.classList.toggle("hide",f!=="all"&&c.dataset.c.indexOf(f)<0)});
-});
-
-document.getElementById("form").addEventListener("submit",function(e){
-  e.preventDefault();
-  var m=document.getElementById("msg").value.trim();
-  location.href="mailto:ykchoudhary911733@gmail.com?subject="+encodeURIComponent("Project enquiry from portfolio")+"&body="+encodeURIComponent(m);
-});
-
+{t:"Mine Survey",tag:"M300 · L1 LiDAR",c:"lidar",a:"mine",s:"Aerial LiDAR survey of Asia’s second-largest open-pit mine with the M300 and L1 sensor.",d:"Conducted an aerial LiDAR survey for Asia’s second-largest open-pit mine using the M300 drone and L1 LiDAR sensor. Acquired high-resolution point cloud data to generate accurate terrain models and mine-planning insights, then processed and analysed it in DJI Terra and CloudCompare for dependable outputs that support efficient mining operations."},
+{t:"Stockpile Volume",tag:"LiDAR + Photogrammetry",c:"photo lidar",a:"stock",s:"Monthly volumetric surveys for Hindustan Zinc (Udaipur) and Jindal Steel sites.",d:"Run monthly volumetric surveys for Hindustan Zinc Limited (Udaipur) and Jindal Steel Plants at Raigarh and Angul to support stockpile management. UAV LiDAR and photogrammetry measure material volumes accurately, and data is processed in CloudCompare, Agisoft Metashape and Global Mapper to produce precise reports for inventory control and planning."},
+{t:"Transmission Line Survey",tag:"10 km corridor",c:"lidar",a:"tower",s:"A 10 km LiDAR corridor survey in Rishikesh with the M300 and L1 payload.",d:"Surveyed a 10 km transmission line in Rishikesh in October 2022 using the M300 with an L1 LiDAR payload. Captured high-precision LiDAR and RGB data for corridor mapping and obstacle analysis, then generated accurate 3D models in DJI Terra and CloudCompare to support infrastructure assessment and maintenance planning."},
+{t:"Line Inspection · Thermal",tag:"Thermal + RGB",c:"thermal",a:"tower1",s:"Thermal and RGB inspection of transmission lines for JSPL Raigarh.",d:"Inspected transmission lines for JSPL Raigarh using thermal and RGB imaging. Captured and analysed thermal data to detect hotspot anomalies and assess line condition, producing detailed inspection reports with the DJI Thermal Analysis Tool for efficient fault detection and maintenance planning."},
+{t:"Steel Plant Thermal",tag:"Thermal inspection",c:"thermal",a:"plant",s:"Kilns, coke ovens, boilers and chimneys inspected at JSPL Raigarh’s steel plant.",d:"Executed a thermal inspection at JSPL Raigarh’s steel plant covering rotary kilns, coke ovens, boilers, boiler pipes and chimneys. Thermal and RGB imaging revealed heat anomalies, structural issues and inefficiencies, and the findings were delivered as actionable reports for predictive maintenance and performance optimisation."},
+{t:"Aerial Surveillance",tag:"Public sector",c:"surv",a:"surv",s:"One month of drone surveillance with the Excise Department, Patna, Bihar.",d:"Worked with the Excise Department in Patna, Bihar, for one month on aerial surveillance operations. Used drones for monitoring and reconnaissance to support law-enforcement activity, and helped capture and analyse real-time data for better situational awareness and operational planning."}];
+var C={};
+function art(k){if(C[k])return'<img src="'+C[k]+'" alt="">';
+var W=640,H=352,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d");
+function nz(a,b){var s=Math.sin(a*127.1+b*311.7)*43758.5453;return s-Math.floor(s)}
+function lp(a,b,t){return a+(b-a)*t}
+var g=x.createLinearGradient(0,0,0,H);
+if(k=="tower1"||k=="plant"){g.addColorStop(0,"#2a0f45");g.addColorStop(1,"#12081f");x.fillStyle=g;x.fillRect(0,0,W,H);x.filter="blur(5px)";
+var bl;if(k=="plant"){x.fillStyle="#5b2a85";x.fillRect(90,80,40,270);x.fillRect(250,170,150,180);x.fillRect(470,210,100,140);bl=[[110,100,72],[325,235,62],[520,265,42]]}
+else{x.strokeStyle="#7a3a9a";x.lineWidth=7;[130,510].forEach(function(t){x.beginPath();x.moveTo(t,60);x.lineTo(t-50,350);x.moveTo(t,60);x.lineTo(t+50,350);x.moveTo(t-60,100);x.lineTo(t+60,100);x.stroke()});x.lineWidth=3;[0,22,44].forEach(function(d){x.beginPath();x.moveTo(70,100+d);x.quadraticCurveTo(320,230+d,570,100+d);x.stroke()});bl=[[320,175,88],[210,150,30]]}
+bl.forEach(function(b){var r=x.createRadialGradient(b[0],b[1],0,b[0],b[1],b[2]);r.addColorStop(0,"#fffbd0");r.addColorStop(.25,"#ffc400");r.addColorStop(.55,"#ff3a1a");r.addColorStop(1,"rgba(70,10,110,0)");x.fillStyle=r;x.fillRect(b[0]-b[2],b[1]-b[2],b[2]*2,b[2]*2)});x.filter="none";
+for(var i=0;i<2800;i++){x.fillStyle="rgba(255,255,255,"+Math.random()*.05+")";x.fillRect(Math.random()*W,Math.random()*H,1.6,1.6)}
+var b=bl[0];x.strokeStyle="#fff";x.lineWidth=1.5;x.beginPath();x.moveTo(b[0]-14,b[1]);x.lineTo(b[0]+14,b[1]);x.moveTo(b[0],b[1]-14);x.lineTo(b[0],b[1]+14);x.stroke();x.fillStyle="rgba(0,0,0,.65)";x.fillRect(b[0]+16,b[1]-34,112,24);x.fillStyle="#fff";x.font="14px monospace";x.fillText(k=="plant"?"Sp1  310.2 °C":"Sp1  78.4 °C",b[0]+24,b[1]-17);
+var lg=x.createLinearGradient(0,40,0,300);lg.addColorStop(0,"#fffbd0");lg.addColorStop(.4,"#ff3a1a");lg.addColorStop(1,"#2a0f45");x.fillStyle=lg;x.fillRect(606,40,14,260)}
+else{g.addColorStop(0,"#0e2a33");g.addColorStop(.5,"#0a1319");g.addColorStop(1,"#070b10");x.fillStyle=g;x.fillRect(0,0,W,H);
+var hf,cf,P3=[[-.25,.05,.3,.2],[.12,.12,.38,.27],[.3,-.1,.22,.17]];
+if(k=="mine"){hf=function(u,v){var d=.40-Math.sqrt(u*u+v*v*1.6);return .28-(d>0?Math.floor(d*10)/10*1.5:0)+nz(Math.floor(u*60),Math.floor(v*60))*.012};cf=function(h,u,v){var t=Math.min(1,Math.max(0,(h+.35)/.65)),n=nz(Math.floor(u*50),Math.floor(v*50))*18;return[lp(80,200,t)+n,lp(58,152,t)+n,lp(44,102,t)+n]}}
+else if(k=="stock"){hf=function(u,v){var m=0;P3.forEach(function(p){m=Math.max(m,p[2]-Math.hypot(u-p[0],(v-p[1])*1.2)*(p[2]/p[3]))});return Math.max(0,m)+nz(Math.floor(u*80),Math.floor(v*80))*.01};cf=function(h){var t=Math.min(1,h/.35);return h>.02?[lp(86,150,t),lp(80,118,t),lp(74,96,t)]:[156,138,106]}}
+else if(k=="surv"){hf=function(u,v){return .05*Math.sin(u*7)*Math.cos(v*6)};cf=function(h,u,v){var n=nz(Math.floor(u*9),Math.floor(v*9)),m=nz(Math.floor(u*60),Math.floor(v*60))*20;return n>.45?[70+m,122+m,56+m]:[158+m,134+m,86+m]}}
+else{hf=function(u,v){return .12*Math.sin(u*5)+.08*Math.cos(v*4+u*2)};cf=function(h,u,v){var n=nz(Math.floor(u*40),Math.floor(v*40));return[80+n*40+h*90,102+n*30+h*50,62+n*20]}}
+var N=190;function pj(u,v,h){var f=v+.5;return[W/2+u*W*(.6+f*.5),H*.26+f*H*.5-h*H*.8,f]}
+function dt(u,v,h,r,gc,b,z){var p=pj(u,v,h);x.fillStyle="rgba("+r+","+gc+","+b+","+(.55+p[2]*.45)+")";x.fillRect(p[0],p[1],z,z)}
+for(var j=0;j<N;j++)for(var i=0;i<N;i++){var u=i/N-.5,v=j/N-.5,h=hf(u,v),s=Math.min(1.35,Math.max(.55,1-(hf(u+.01,v+.012)-h)*16)),q=cf(h,u,v),p=pj(u,v,h);x.fillStyle="rgba("+(q[0]*s|0)+","+(q[1]*s|0)+","+(q[2]*s|0)+","+(.5+p[2]*.5)+")";x.fillRect(p[0],p[1],1.4+p[2]*2.4,1.4+p[2]*2.4)}
+if(k=="tower"){[-.3,.3].forEach(function(tx){var h0=hf(tx,0),t,hh;for(hh=0;hh<=.4;hh+=.004){dt(tx-.012*(1-hh/.4),0,h0+hh,200,214,222,2.4);dt(tx+.012*(1-hh/.4),0,h0+hh,200,214,222,2.4)}[.4,.32].forEach(function(a){for(t=-.06;t<=.06;t+=.003)dt(tx,t,h0+a,200,214,222,2.4)})});
+[-.05,0,.05].forEach(function(o){for(var t=0;t<=1;t+=.004){var u=-.3+.6*t;dt(u,o,hf(-.3,0)+.4-.1*(1-Math.pow(2*t-1,2)),235,240,244,2)}})}
+if(k=="surv"){for(var t=0;t<=1;t+=.003){var u=-.4+.8*t,v=.2*Math.sin(t*6)-.05,p=pj(u,v,.04);x.fillStyle="rgba(63,232,196,.25)";x.fillRect(p[0]-3,p[1]-3,8,8);x.fillStyle="#3fe8c4";x.fillRect(p[0],p[1],2.4,2.4)}}}
+C[k]=c.toDataURL("image/jpeg",.86);return'<img src="'+C[k]+'" alt="">'}
+var D={
+mine:{m:[["Site","Asia’s second-largest open-pit mine"],["Platform","DJI M300 + Zenmuse L1 LiDAR"],["Software","DJI Terra, CloudCompare"],["Focus","Terrain model & mine planning"]],
+ch:"An open pit of this size has steep benches, haul roads and active zones. Surveying it on foot is slow, hard to repeat and unsafe, yet planning needs an accurate, current surface.",
+st:["<b>Recon & safety.</b> Studied the pit layout, marked safe take-off areas and agreed flight zones with the site team.","<b>Mission planning.</b> Designed overlapping LiDAR flight lines at a steady height above the ground so point density stays consistent across the pit.","<b>Pre-flight checks.</b> Battery, IMU and GNSS lock checks before every sortie, plus post-flight data verification so no gaps were left behind.","<b>Capture.</b> Flew the L1 in multiple sorties, collecting LiDAR and RGB together to get geometry and colour in a single pass.","<b>Processing.</b> Built the point cloud in DJI Terra, then cleaned noise and classified ground points in CloudCompare."],
+out:["High-density, colourised point cloud of the pit","Terrain model (ground surface) ready for mine planning","Contours and cross-sections for the planning team","Clean, repeatable dataset to compare against future surveys"],
+res:"The whole pit was mapped without anyone walking its benches, and the planners received a current, accurate 3D surface they could use directly."},
+stock:{m:[["Sites","Hindustan Zinc (Udaipur), JSPL Raigarh, JSPL Angul"],["Frequency","Monthly"],["Method","UAV LiDAR + photogrammetry"],["Software","CloudCompare, Metashape, Global Mapper"]],
+ch:"Stockpiles change every month. Tape or total-station measurement is slow and varies between surveyors, but inventory control needs numbers that are comparable month after month.",
+st:["<b>Fixed flight plan.</b> Reused the same boundaries and settings each month so results stay directly comparable.","<b>Capture.</b> Collected LiDAR and photogrammetry imagery over every stockpile in a single visit.","<b>Processing.</b> Generated point clouds and orthomosaics in Metashape and CloudCompare, then cleaned and aligned each month’s dataset.","<b>Volume calculation.</b> Defined the base surface and pile boundary, then computed volumes in Global Mapper and CloudCompare.","<b>Reporting.</b> Compared against the previous month and prepared a clear report for the plant team."],
+out:["Volume for each stockpile","Month-on-month change summary","Orthomosaic and point cloud of every site","Report that supports inventory control and planning"],
+res:"Plant teams get a consistent monthly method for measuring material, which makes inventory checks and operational planning faster and easier to trust."},
+tower:{m:[["Location","Rishikesh"],["Date","October 2022"],["Corridor","10 km transmission line"],["Platform","DJI M300 + L1 LiDAR"]],
+ch:"A 10 km line is a long, narrow target. Terrain and vegetation near the conductors have to be mapped accurately to judge clearances and plan maintenance.",
+st:["<b>Corridor planning.</b> Followed the tower alignment and split the route into flight segments sized to battery life and safe operating range.","<b>Capture.</b> Flew each segment with the L1, recording LiDAR and RGB along the full corridor.","<b>Processing.</b> Merged the segments in DJI Terra and separated ground, vegetation, towers and wires in CloudCompare.","<b>Obstacle analysis.</b> Checked how close vegetation and terrain came to the line along the corridor.","<b>Modelling.</b> Built a 3D model of the line and its surroundings for the assessment team."],
+out:["Corridor-wide LiDAR point cloud","3D model of towers, conductors and terrain","Obstacle and vegetation observations","Data to support infrastructure assessment and maintenance planning"],
+res:"The full 10 km corridor was documented in one organised dataset, giving the maintenance team a clear view of where attention is needed."},
+tower1:{m:[["Site","JSPL Raigarh"],["Asset","Transmission lines"],["Sensors","Thermal + RGB"],["Software","DJI Thermal Analysis Tool"]],
+ch:"Loose joints, worn insulators and overloaded parts heat up before they fail, but the heat cannot be seen by eye. The goal was to catch these faults early.",
+st:["<b>Patrol plan.</b> Planned flights along the towers with close views of joints, insulators and conductors.","<b>Paired capture.</b> Took thermal and RGB images together so every hot spot could be matched to the real component.","<b>Analysis.</b> Measured temperatures in the DJI Thermal Analysis Tool and compared suspect points with normal parts of the line.","<b>Prioritising.</b> Ranked anomalies by how serious they looked and where they were.","<b>Reporting.</b> Compiled the findings into a clear inspection report."],
+out:["Thermal and RGB image pairs for each finding","List of hot-spot anomalies with locations","Inspection report with line condition summary","Inputs for maintenance planning"],
+res:"Faults were identified from the air without shutting down or climbing the line, so maintenance could be targeted instead of guessed."},
+plant:{m:[["Site","JSPL Raigarh steel plant"],["Assets","Rotary kilns, coke ovens, boilers, boiler pipes, chimneys"],["Sensors","Thermal + RGB"],["Software","DJI Thermal Analysis Tool"]],
+ch:"Kilns, ovens and chimneys run hot and are hard to reach. Manual inspection is slow and risky, yet heat anomalies there point to wear, structural issues and wasted energy.",
+st:["<b>Safety briefing.</b> Agreed flight zones and standoff distances with the plant team before starting.","<b>Capture.</b> Recorded thermal and RGB images of each asset from safe positions.","<b>Analysis.</b> Reviewed the thermal data for heat anomalies and checked them against the RGB images.","<b>Tagging.</b> Organised every finding by asset so the plant team could act on it quickly.","<b>Reporting.</b> Delivered reports built for predictive maintenance and performance review."],
+out:["Thermal images of kilns, ovens, boilers, pipes and chimneys","Flagged heat anomalies and structural concerns","Asset-wise inspection report","Recommendations for predictive maintenance and optimisation"],
+res:"The plant gained a clear thermal picture of its critical equipment without sending people to hard-to-reach, high-heat areas."},
+surv:{m:[["Client","Excise Department, Patna, Bihar"],["Duration","One month"],["Type","Aerial surveillance"],["Role","Drone pilot & data support"]],
+ch:"Field teams needed a quick aerial view of areas of interest to plan operations and stay aware of the situation on the ground.",
+st:["<b>Briefing.</b> Agreed the areas of interest and objectives with the department team.","<b>Flights.</b> Flew monitoring and reconnaissance missions with safety checks before and after each one.","<b>Live view.</b> Shared real-time footage so teams could make decisions as flights happened.","<b>Review.</b> Went through recorded footage and noted key observations.","<b>Support.</b> Helped turn the data into inputs for operational planning."],
+out:["Real-time aerial video for field teams","Recorded footage of each mission","Observations to improve situational awareness","Support for operational planning"],
+res:"Over a month of operations, the team had on-demand aerial eyes that improved awareness and planning."}
+};
+var R={
+mine:{t:"LiDAR Terrain Survey Report",h:["Parameter","Value"],r:[["Area surveyed","4.2 km²"],["Average point density","~250 pts/m²"],["Ground classification","Completed"],["Elevation range","180 m"],["Contour interval","5 m"]],f:["LAS / LAZ point cloud","GeoTIFF terrain model","DXF contours","PDF report"]},
+stock:{t:"Stockpile Volume Report — Monthly",b:1,h:["Stockpile","Volume (m³)","Change vs last month"],r:[["Pile A","42,300","+3.1%"],["Pile B","68,750","−1.8%"],["Pile C","21,900","+0.6%"],["Pile D","35,400","+5.2%"]],f:["PDF report","Excel volume sheet","Orthomosaic","Point cloud"]},
+tower:{t:"Transmission Corridor Report — 10 km",h:["Span","Min. clearance","Status"],r:[["T1 → T2","8.4 m","OK"],["T2 → T3","5.1 m","Watch"],["T3 → T4","7.9 m","OK"],["T4 → T5","3.6 m","Action"]],f:["LAS point cloud","3D corridor model","KML route","PDF report"]},
+tower1:{t:"Thermal Line Inspection Report",h:["Location","Max temp","ΔT vs normal","Severity"],r:[["Tower 7 · Jumper","78 °C","+34 °C","High"],["Tower 12 · Insulator","52 °C","+14 °C","Medium"],["Tower 19 · Clamp","44 °C","+6 °C","Low"]],f:["PDF inspection report","Thermal + RGB image pairs","Excel findings log"]},
+plant:{t:"Plant Thermal Inspection Report — Asset-wise",h:["Asset","Max temp","Finding","Priority"],r:[["Rotary kiln shell","310 °C","Localised hot patch","High"],["Coke oven door","190 °C","Heat leakage","Medium"],["Boiler pipe run","140 °C","Insulation gap","Medium"],["Chimney","95 °C","Normal profile","Low"]],f:["PDF report","Thermal image set","Excel asset log"]},
+surv:{t:"Surveillance Mission Log",h:["Day","Mission","Duration","Observation"],r:[["Day 1","Area recon","45 min","Routes mapped"],["Day 8","Monitoring","38 min","Activity noted"],["Day 15","Monitoring","42 min","Report shared"],["Day 24","Follow-up","40 min","Area clear"]],f:["Video footage","Daily log","PDF summary"]}
+};
+function cl(s){return/^(High|Action)$/.test(s)?'<span class="bx bh">'+s+'</span>':/^(Medium|Watch)$/.test(s)?'<span class="bx bm">'+s+'</span>':/^(Low|OK)$/.test(s)?'<span class="bx bl">'+s+'</span>':s}
+function rp(k){var q=R[k],h='<div class="rp"><div class="rh">'+q.t+'<span>SAMPLE FORMAT</span></div><div class="art">'+art(k)+'</div>';
+if(q.b){var v=function(x){return parseFloat(x[1].replace(/,/g,""))},mx=Math.max.apply(null,q.r.map(v));h+='<div class="bars">'+q.r.map(function(x){return'<div class="b2"><em>'+x[0]+'</em><i style="width:'+Math.round(v(x)/mx*55)+'%"></i>'+x[1]+'</div>'}).join('')+'</div>'}
+h+='<div style="overflow-x:auto"><table class="rt"><tr>'+q.h.map(function(c){return'<th>'+c+'</th>'}).join('')+'</tr>'+q.r.map(function(r){return'<tr>'+r.map(function(c){return'<td>'+cl(c)+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>';
+h+='<div class="rf">Delivered as:<span class="tg">'+q.f.map(function(f){return'<span>'+f+'</span>'}).join('')+'</span></div><div class="rn">Illustrative sample — figures show the report layout, not client data.</div></div>';return h}
+var M2={
+mine:{no:"YC/LS/001",mt:[["Survey type","UAV LiDAR"],["Platform","DJI Matrice 300"],["Sensor","Zenmuse L1"],["Datum","WGS 84 / UTM 43N"]],su:"Aerial LiDAR survey of the pit area to produce a classified point cloud and terrain model for mine planning.",cap:"Fig. 1 — Cross-section profile extracted from the terrain model.",rm:["Ground points classified and noise removed.","Terrain model suitable for planning and volume work.","Dataset can be repeated for change detection."]},
+stock:{no:"YC/SV/001",mt:[["Survey type","LiDAR + photogrammetry"],["Platform","DJI Matrice 300"],["Software","Metashape, Global Mapper"],["Frequency","Monthly"]],su:"Monthly volumetric survey of stockpiles for inventory control, compared against the previous month.",cap:"Fig. 1 — Stockpile outlines and contours.",rm:["Same flight plan reused for comparability.","Base surface defined for every pile.","Volumes reported in cubic metres."]},
+tower:{no:"YC/TL/001",mt:[["Survey type","Corridor LiDAR + RGB"],["Platform","DJI Matrice 300"],["Sensor","Zenmuse L1"],["Software","DJI Terra, CloudCompare"]],su:"Corridor survey of a transmission line to map towers, conductors, vegetation and terrain for clearance checks.",cap:"Fig. 1 — Towers and conductors extracted from the point cloud.",rm:["Vegetation and terrain checked against conductor height.","Spans marked Watch or Action need follow-up."]},
+tower1:{no:"YC/TI/001",mt:[["Survey type","Thermal + RGB inspection"],["Platform","DJI drone, thermal payload"],["Software","DJI Thermal Analysis Tool"],["Conditions","Daylight, clear sky"]],su:"Thermal inspection of a transmission line to find hot spots on joints, insulators and conductors.",cap:"Fig. 1 — Thermal image with hot-spot marker (Sp1).",rm:["High-severity items should be inspected first.","Re-inspect after repair to confirm the fix."]},
+plant:{no:"YC/TP/001",mt:[["Survey type","Thermal + RGB inspection"],["Assets","Kilns, ovens, boilers, chimneys"],["Software","DJI Thermal Analysis Tool"],["Conditions","Operating plant"]],su:"Asset-wise thermal inspection of plant equipment to spot heat anomalies for predictive maintenance.",cap:"Fig. 1 — Thermal overview of inspected assets.",rm:["Findings are tagged per asset.","High-priority items need maintenance review."]},
+surv:{no:"YC/SL/001",mt:[["Mission type","Aerial surveillance"],["Duration","One month"],["Platform","DJI drone"],["Output","Live feed + logs"]],su:"Daily aerial monitoring missions with real-time video for field teams and a log of every flight.",cap:"Fig. 1 — Sample flight track.",rm:["Live feed shared with the field team.","Footage retained for review."]}
+};
+function heat(b,w,tx){var s='<defs><radialGradient id="hg"><stop offset="0" stop-color="#fff7b0"/><stop offset=".28" stop-color="#ffb000"/><stop offset=".6" stop-color="#e0301e"/><stop offset="1" stop-color="#2a0a4a" stop-opacity="0"/></radialGradient><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff7b0"/><stop offset=".4" stop-color="#e0301e"/><stop offset="1" stop-color="#2a0a4a"/></linearGradient></defs><rect width="400" height="220" fill="#1b0a33"/>'+(w||'');b.forEach(function(c){s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" fill="url(#hg)"/>'});var c=b[0];return s+'<path d="M'+(c[0]-12)+' '+c[1]+'h24M'+c[0]+' '+(c[1]-12)+'v24" stroke="#fff"/><rect x="'+(c[0]+14)+'" y="'+(c[1]-30)+'" width="84" height="20" rx="3" fill="#000" fill-opacity=".65"/><text x="'+(c[0]+20)+'" y="'+(c[1]-16)+'" fill="#fff" font-size="11" font-family="monospace">'+tx+'</text><rect x="370" y="24" width="10" height="172" fill="url(#lg)"/><text x="352" y="32" fill="#ccc" font-size="9">max</text><text x="352" y="198" fill="#ccc" font-size="9">min</text>'}
+function fg(k){var s;
+if(k=="mine"){var p="";for(var i=0;i<=40;i++)p+=(i?"L":"M")+(20+i*9)+" "+(60+80*Math.sin(Math.PI*i/40)+Math.sin(i*1.7)*3).toFixed(1);s='<path d="'+p+'L380 190L20 190Z" fill="#3fe8c4" fill-opacity=".12"/><path d="'+p+'" fill="none" stroke="#3fe8c4" stroke-width="2"/><path d="M20 190H380M20 30V190" stroke="#46606b"/><text x="200" y="212" fill="#8aa0a8" font-size="10" text-anchor="middle">Chainage (m)</text><text x="26" y="26" fill="#8aa0a8" font-size="10">Elevation (m)</text>'}
+else if(k=="tower1")s=heat([[200,92,62]],'<path d="M60 60Q200 120 340 60M60 78Q200 138 340 78" stroke="#8a3d8f" fill="none" stroke-width="2"/>',"Sp1  78.4 °C");
+else if(k=="plant")s=heat([[85,62,46],[215,128,40],[320,150,30]],'<g fill="none" stroke="#6a2f86"><rect x="70" y="50" width="28" height="150"/><rect x="170" y="100" width="90" height="100"/><rect x="290" y="130" width="60" height="70"/></g>',"Sp1  310 °C");
+else if(k=="surv")s='<path d="M0 55H400M0 110H400M0 165H400M80 0V220M160 0V220M240 0V220M320 0V220" stroke="#1f3a46"/><path d="M40 170C120 30 200 200 280 80S360 60 372 40" fill="none" stroke="#3fe8c4" stroke-width="2" stroke-dasharray="6 5"/><circle cx="40" cy="170" r="6" fill="#3fe8c4"/><circle cx="372" cy="40" r="6" fill="#ffb35c"/><text x="52" y="188" fill="#8aa0a8" font-size="10">Take-off</text><text x="318" y="30" fill="#8aa0a8" font-size="10">Landing</text>';
+else return art(k);
+return'<svg viewBox="0 0 400 220">'+s+'</svg>'}
+function rp2(k){var q=R[k],m=M2[k],v=function(x){return parseFloat(x[1].replace(/,/g,""))};
+var h='<div class="pp"><div class="lh"><div><b>YOGENDER CHOUDHARY</b><span>UAV · LiDAR · Thermal Surveys</span></div><div class="rno">Report No. '+m.no+'<br>Date: DD / MM / YYYY</div></div><h5>'+q.t+'</h5><div class="mt">'+m.mt.map(function(x){return'<div><span>'+x[0]+'</span>'+x[1]+'</div>'}).join('')+'</div><div class="sh">1. Summary</div><p>'+m.su+'</p><div class="pf">'+fg(k)+'</div><div class="pc">'+m.cap+'</div><div class="sh">2. Results</div>';
+if(q.b){var mx=Math.max.apply(null,q.r.map(v));h+='<div class="bars" style="padding:4px 0 10px">'+q.r.map(function(x){return'<div class="b2"><em>'+x[0]+'</em><i style="width:'+Math.round(v(x)/mx*55)+'%"></i>'+x[1]+'</div>'}).join('')+'</div>'}
+h+='<div style="overflow-x:auto;border:1px solid #d5e0e3;border-radius:6px"><table class="rt"><tr>'+q.h.map(function(c){return'<th>'+c+'</th>'}).join('')+'</tr>'+q.r.map(function(r){return'<tr>'+r.map(function(c){return'<td>'+cl(c)+'</td>'}).join('')+'</tr>'}).join('')+'</table></div><div class="sh">3. Remarks</div><ul>'+m.rm.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>';
+return h+'<div class="sg"><div><i>Yogender C.</i>Prepared by: Yogender Choudhary<br>UAV Pilot &amp; LiDAR Operator</div><div style="text-align:right">Page 1 of 1</div></div><div class="ft">Delivered as: '+q.f.map(function(f){return'<span>'+f+'</span>'}).join('')+'</div><div class="fn">Sample report layout — figures are illustrative, not client data.</div></div>'}
+function rd(p){var d=D[p.a];return'<div class="art">'+art(p.a)+'</div><div class="db"><span class="pt" style="position:static;display:inline-block">'+p.tag+'</span><h3>'+p.t+'</h3><p>'+p.d+'</p><div class="mg">'+d.m.map(function(x){return'<div><span>'+x[0]+'</span>'+x[1]+'</div>'}).join('')+'</div><h4>The challenge</h4><p>'+d.ch+'</p><h4>How I did it</h4><ol class="stp">'+d.st.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ol><h4>What was delivered</h4><ul class="ot">'+d.out.map(function(s){return'<li>'+s+'</li>'}).join('')+'</ul>'+rp2(p.a)+'<div class="rs"><b>Outcome</b>'+d.res+'</div><a href="#contact" class="btn p" style="margin-top:24px" onclick="dg.close()">Need a similar survey? →</a></div>'}
+var pg=document.getElementById("pg"),dg=document.getElementById("dg"),dc=document.getElementById("dc");
+P.forEach(function(p){var e=document.createElement("article");e.className="pj rv";e.dataset.c=p.c;e.tabIndex=0;
+e.innerHTML='<div class="art">'+art(p.a)+'<span class="pt">'+p.tag+'</span></div><div class="pb"><h3>'+p.t+'</h3><p>'+p.s+'</p><div class="mr">View details →</div></div>';
+function o(){dc.innerHTML=rd(p);dg.showModal();dg.scrollTop=0}
+e.onclick=o;e.onkeydown=function(k){if(k.key=="Enter")o()};pg.appendChild(e)});
+document.getElementById("dx").onclick=function(){dg.close()};dg.onclick=function(e){if(e.target===dg)dg.close()};
+document.getElementById("fl").onclick=function(e){var b=e.target.closest("button");if(!b)return;this.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");var f=b.dataset.f;pg.querySelectorAll(".pj").forEach(function(c){c.classList.toggle("h",f!="all"&&c.dataset.c.indexOf(f)<0)})};
+document.getElementById("fm").onsubmit=function(e){e.preventDefault();location.href="mailto:ykchoudhary911733@gmail.com?subject="+encodeURIComponent("Survey enquiry from "+document.getElementById("nm").value)+"&body="+encodeURIComponent(document.getElementById("ms").value)};
 document.getElementById("yr").textContent=new Date().getFullYear();
-var nav=document.getElementById("nav"),links=document.getElementById("links");
-document.getElementById("burger").onclick=function(){links.classList.toggle("open")};
-links.addEventListener("click",function(){links.classList.remove("open")});
-var secs=[].map.call(links.querySelectorAll("a"),function(a){return document.querySelector(a.getAttribute("href"))});
-addEventListener("scroll",function(){
-  nav.classList.toggle("scrolled",scrollY>30);
-  var y=scrollY+140;
-  secs.forEach(function(s,i){if(s&&y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight){links.querySelectorAll("a").forEach(function(a){a.classList.remove("active")});links.querySelectorAll("a")[i].classList.add("active")}});
-},{passive:true});
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
-document.querySelectorAll(".rv").forEach(function(el){io.observe(el)});
+var nav=document.getElementById("nav"),lk=document.getElementById("lk"),al=lk.querySelectorAll("a"),ss=[].map.call(al,function(a){return document.querySelector(a.getAttribute("href"))});
+document.getElementById("bg").onclick=function(){lk.classList.toggle("o")};lk.onclick=function(){lk.classList.remove("o")};
+addEventListener("scroll",function(){nav.classList.toggle("s",scrollY>30);var y=scrollY+150;ss.forEach(function(s,i){if(y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight){al.forEach(function(a){a.classList.remove("on")});al[i].classList.add("on")}})},{passive:true});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll(".rv").forEach(function(e){io.observe(e)});
+(function(){var pr=document.getElementById("pr");addEventListener("scroll",function(){var h=document.documentElement;pr.style.width=(scrollY/(h.scrollHeight-innerHeight)*100)+"%"},{passive:true})})();
+document.querySelectorAll(".cd,.pj,.st").forEach(function(e){e.addEventListener("pointermove",function(m){var r=e.getBoundingClientRect();e.style.setProperty("--mx",m.clientX-r.left+"px");e.style.setProperty("--my",m.clientY-r.top+"px")})});
+(function(){var w=["UAV pilot","LiDAR operator","thermal inspector","geospatial problem-solver"],i=0,j=0,d=0,el=document.getElementById("tp");if(matchMedia("(prefers-reduced-motion:reduce)").matches){el.textContent=w[0];return}
+function k(){var s=w[i];j+=d?-1:1;el.textContent=s.slice(0,j);var t=d?35:75;if(!d&&j==s.length){d=1;t=1400}else if(d&&j==0){d=0;i=(i+1)%w.length;t=350}setTimeout(k,t)}k()})();
+var co=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;co.unobserve(e.target);var b=e.target,n=+b.dataset.n,t0=performance.now();(function s(t){var p=Math.min(1,(t-t0)/1200);b.textContent=Math.round(n*(1-Math.pow(1-p,3)))+b.dataset.s;if(p<1)requestAnimationFrame(s)})(t0)})});
+document.querySelectorAll("[data-n]").forEach(function(b){co.observe(b)});
+document.getElementById("th").onclick=function(){var r=document.documentElement;r.dataset.theme=getComputedStyle(r).colorScheme=="light"?"dark":"light"};
+var hv=document.querySelector(".hv");hv.addEventListener("pointermove",function(e){var r=hv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;hv.style.transform="perspective(900px) rotateY("+x*8+"deg) rotateX("+-y*8+"deg)"});hv.addEventListener("pointerleave",function(){hv.style.transform=""});
+/* LiDAR terrain */
+(function(){var c=document.getElementById("cv"),x=c.getContext("2d"),W,H,N=48,t=0,dpr=Math.min(devicePixelRatio||1,2);
+function rs(){W=c.width=c.clientWidth*dpr;H=c.height=c.clientHeight*dpr}rs();addEventListener("resize",rs);
+function hh(u,v,t){var g=Math.exp(-((u-.15)*(u-.15)+(v+.1)*(v+.1))*14)*.9+Math.exp(-((u+.2)*(u+.2)+(v-.2)*(v-.2))*20)*.6;return g+Math.sin(u*9+t*.3)*.05+Math.cos(v*8)*.05}
+function f(){t+=.016;x.clearRect(0,0,W,H);var s=((t*.22)%1.5)-.25;
+for(var j=0;j<N;j++)for(var i=0;i<N;i++){var u=i/N-.5,v=j/N-.5,h=hh(u,v,t),px=W/2+(u-v)*W*.6,py=H*.58+(u+v)*H*.3-h*H*.34;
+var d=Math.abs(v+.5-s),b=d<.07?1-d/.07:0,m=Math.min(1,Math.max(0,(h+.1)/.9)),r=Math.round(63+m*192),g=Math.round(232-m*53),bl=Math.round(196-m*104);
+x.fillStyle="rgba("+r+","+g+","+bl+","+(.25+m*.35+b*.6)+")";var z=(1.6+m*1.2+b*2.2)*dpr;x.fillRect(px-z/2,py-z/2,z,z)}
+requestAnimationFrame(f)}f()})();
 </script>
 </body>
 </html>
